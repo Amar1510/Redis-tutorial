@@ -116,8 +116,8 @@ read its full explanation.
 
 | Topic | What it demonstrates |
 |-------|----------------------|
-| [Redis basics: storing a value](./redis-basics-site-banner/README.md) | `SET` / `GET` / `DEL` / `EXISTS` on a string key via an Express API |
-| [TTL & key expiry (OTP flow)](./redis-ttl/README.md) | `SET ... EX`, `TTL`, and auto-expiring keys via a phone-OTP example |
+| [Redis basics: storing a value](./redis-basics-site-banner) | `SET` / `GET` / `DEL` / `EXISTS` on a string key via an Express API |
+| [TTL & key expiry (OTP flow)](./redis-ttl) | `SET ... EX`, `TTL`, and auto-expiring keys via a phone-OTP example |
 
 ### Running an example
 
