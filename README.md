@@ -89,6 +89,20 @@ commands get added here as each topic is created.
 | `EXISTS key` | `1` if the key exists, else `0` | `redis-basics-site-banner` |
 | `TYPE key` | The key's data type | `redis-ttl` |
 
+### Hashes
+
+| Command | What it does | Topic |
+|---------|--------------|-------|
+| `HSET key field value [...]` | Set one or more fields of a hash | `redis-json-vs-hash` |
+| `HGET key field` | Get a single field's value | `redis-json-vs-hash` |
+| `HGETALL key` | Get all fields and values | `redis-json-vs-hash` |
+| `HMGET key f1 f2 ...` | Get multiple specific fields | `redis-json-vs-hash` |
+| `HDEL key field [...]` | Delete fields from a hash | `redis-json-vs-hash` |
+| `HEXISTS key field` | `1` if the field exists, else `0` | `redis-json-vs-hash` |
+| `HKEYS key` / `HVALS key` | List all field names / values | `redis-json-vs-hash` |
+| `HLEN key` | Number of fields in the hash | `redis-json-vs-hash` |
+| `HINCRBY key field n` | Atomically add `n` to a numeric field | `redis-json-vs-hash` |
+
 ### Expiry / TTL
 
 | Command | What it does | Topic |
@@ -118,6 +132,7 @@ read its full explanation.
 |-------|----------------------|
 | [Redis basics: storing a value](./redis-basics-site-banner) | `SET` / `GET` / `DEL` / `EXISTS` on a string key via an Express API |
 | [TTL & key expiry (OTP flow)](./redis-ttl) | `SET ... EX`, `TTL`, and auto-expiring keys via a phone-OTP example |
+| [JSON-string vs Hash](./redis-json-vs-hash) | Storing an object as a JSON blob vs a Redis hash (`HSET` / `HGETALL`) |
 
 ### Running an example
 
