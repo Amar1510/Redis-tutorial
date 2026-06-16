@@ -103,6 +103,17 @@ commands get added here as each topic is created.
 | `HLEN key` | Number of fields in the hash | `redis-json-vs-hash` |
 | `HINCRBY key field n` | Atomically add `n` to a numeric field | `redis-json-vs-hash` |
 
+### Lists
+
+| Command | What it does | Topic |
+|---------|--------------|-------|
+| `LPUSH key value [...]` | Push value(s) onto the head (left) | `email-queue-redis-lists` |
+| `RPUSH key value [...]` | Push value(s) onto the tail (right) | `email-queue-redis-lists` |
+| `LPOP key` / `RPOP key` | Pop from the head / tail | `email-queue-redis-lists` |
+| `LLEN key` | Number of elements in the list | `email-queue-redis-lists` |
+| `LRANGE key start stop` | Read a range (`0 -1` = all) | `email-queue-redis-lists` |
+| `BRPOP key [...] timeout` | Blocking pop — wait for an element (worker loops) | `email-queue-redis-lists` |
+
 ### Expiry / TTL
 
 | Command | What it does | Topic |
@@ -123,6 +134,71 @@ commands get added here as each topic is created.
 
 ---
 
+## Terminal / `redis-cli` cheat-sheet
+
+`redis-cli` is the command-line client for talking to a Redis server directly — great
+for inspecting keys while experimenting with these examples.
+
+### Connecting
+
+| Command | What it does |
+|---------|--------------|
+| `redis-cli` | Connect to a local server on the default port (6379) |
+| `redis-cli -h <host> -p <port>` | Connect to a specific host/port |
+| `redis-cli -n 2` | Use database number 2 (Redis has 16 DBs: 0–15) |
+| `redis-cli -a <password>` | Authenticate with a password |
+| `redis-cli ping` | Health check — replies `PONG` if the server is up |
+
+When Redis runs in **Docker** (as in this repo), open a CLI inside the container:
+
+```bash
+docker exec -it redis redis-cli
+```
+
+### Exploring keys
+
+| Command | What it does |
+|---------|--------------|
+| `KEYS *` | List all keys (⚠️ blocks the server on big datasets — dev only) |
+| `SCAN 0 MATCH user:* COUNT 100` | Cursor-based, non-blocking key scan (production-safe) |
+| `DBSIZE` | Number of keys in the current DB |
+| `TYPE <key>` | Data type of a key (`string`, `list`, `hash`, …) |
+| `TTL <key>` / `PTTL <key>` | Time to live in seconds / milliseconds |
+| `RANDOMKEY` | Return a random key |
+
+### Inspecting / debugging
+
+| Command | What it does |
+|---------|--------------|
+| `MONITOR` | Live-stream every command the server receives (great for debugging) |
+| `INFO` | Server stats (memory, clients, persistence, …) |
+| `INFO keyspace` | Per-database key counts |
+| `CLIENT LIST` | Show connected clients |
+| `SLOWLOG GET` | Recent slow commands |
+
+### Server / data management
+
+| Command | What it does |
+|---------|--------------|
+| `SELECT <n>` | Switch to database number `n` |
+| `FLUSHDB` | Delete all keys in the **current** DB (⚠️ destructive) |
+| `FLUSHALL` | Delete all keys in **all** DBs (⚠️ destructive) |
+| `SAVE` / `BGSAVE` | Snapshot data to disk (sync / background) |
+| `CONFIG GET <param>` | Read a config value, e.g. `CONFIG GET maxmemory` |
+
+### Running commands without an interactive session
+
+```bash
+# pass a command straight from your shell
+redis-cli set greeting "hello"
+redis-cli get greeting
+
+# inside the Docker container
+docker exec -it redis redis-cli LRANGE queue:emails 0 -1
+```
+
+---
+
 ## Repo structure
 
 Each folder is one self-contained topic with its own README. Click a topic below to
@@ -133,6 +209,7 @@ read its full explanation.
 | [Redis basics: storing a value](./redis-basics-site-banner) | `SET` / `GET` / `DEL` / `EXISTS` on a string key via an Express API |
 | [TTL & key expiry (OTP flow)](./redis-ttl) | `SET ... EX`, `TTL`, and auto-expiring keys via a phone-OTP example |
 | [JSON-string vs Hash](./redis-json-vs-hash) | Storing an object as a JSON blob vs a Redis hash (`HSET` / `HGETALL`) |
+| [Email queue (Lists)](./email-queue-redis-lists) | A FIFO job queue using Redis lists (`LPUSH` / `RPOP`) |
 
 ### Running an example
 
