@@ -114,6 +114,16 @@ commands get added here as each topic is created.
 | `LRANGE key start stop` | Read a range (`0 -1` = all) | `email-queue-redis-lists` |
 | `BRPOP key [...] timeout` | Blocking pop — wait for an element (worker loops) | `email-queue-redis-lists` |
 
+### Pub/Sub
+
+| Command | What it does | Topic |
+|---------|--------------|-------|
+| `PUBLISH channel message` | Send a message; returns # of subscribers reached | `redis-pub-sub` |
+| `SUBSCRIBE channel [...]` | Listen on one or more channels | `redis-pub-sub` |
+| `PSUBSCRIBE pattern` | Subscribe by pattern (e.g. `news.*`) | `redis-pub-sub` |
+| `PUBSUB CHANNELS [pattern]` | List currently active channels | `redis-pub-sub` |
+| `PUBSUB NUMSUB [channel ...]` | Subscriber count per channel | `redis-pub-sub` |
+
 ### Expiry / TTL
 
 | Command | What it does | Topic |
@@ -210,6 +220,7 @@ read its full explanation.
 | [TTL & key expiry (OTP flow)](./redis-ttl) | `SET ... EX`, `TTL`, and auto-expiring keys via a phone-OTP example |
 | [JSON-string vs Hash](./redis-json-vs-hash) | Storing an object as a JSON blob vs a Redis hash (`HSET` / `HGETALL`) |
 | [Email queue (Lists)](./email-queue-redis-lists) | A FIFO job queue using Redis lists (`LPUSH` / `RPOP`) |
+| [Pub/Sub notifications](./redis-pub-sub) | Real-time messaging with `PUBLISH` / `SUBSCRIBE` (publisher + subscriber) |
 
 ### Running an example
 
