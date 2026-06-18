@@ -68,6 +68,37 @@ This keeps keys organized and makes them easy to scan/group.
 
 ---
 
+## Repo structure
+
+Each folder is one self-contained topic with its own README. Click a topic below to
+read its full explanation.
+
+| Topic | What it demonstrates |
+|-------|----------------------|
+| [Redis basics: storing a value](./redis-basics-site-banner) | `SET` / `GET` / `DEL` / `EXISTS` on a string key via an Express API |
+| [TTL & key expiry (OTP flow)](./redis-ttl) | `SET ... EX`, `TTL`, and auto-expiring keys via a phone-OTP example |
+| [JSON-string vs Hash](./redis-json-vs-hash) | Storing an object as a JSON blob vs a Redis hash (`HSET` / `HGETALL`) |
+| [Email queue (Lists)](./email-queue-redis-lists) | A FIFO job queue using Redis lists (`LPUSH` / `RPOP`) |
+| [Pub/Sub notifications](./redis-pub-sub) | Real-time messaging with `PUBLISH` / `SUBSCRIBE` (publisher + subscriber) |
+| [Rate limiting](./redis-rate-limiting) | Fixed-window API rate limiter using `INCR` + `EXPIRE` |
+
+### Running an example
+
+Most examples assume a local Redis. The quickest way is Docker:
+
+```bash
+docker run -d --name redis -p 6379:6379 redis:7
+```
+
+Then inside a topic folder:
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
 ## Redis command reference
 
 A running cheat-sheet of every command used across the topics in this repo. New
@@ -123,6 +154,14 @@ commands get added here as each topic is created.
 | `PSUBSCRIBE pattern` | Subscribe by pattern (e.g. `news.*`) | `redis-pub-sub` |
 | `PUBSUB CHANNELS [pattern]` | List currently active channels | `redis-pub-sub` |
 | `PUBSUB NUMSUB [channel ...]` | Subscriber count per channel | `redis-pub-sub` |
+
+### Counters / atomic numbers
+
+| Command | What it does | Topic |
+|---------|--------------|-------|
+| `INCR key` | Atomically increment (creates key at `1` if absent) | `redis-rate-limiting` |
+| `DECR key` | Atomically decrement | `redis-rate-limiting` |
+| `INCRBY key n` | Increment by `n` | `redis-rate-limiting` |
 
 ### Expiry / TTL
 
@@ -205,34 +244,4 @@ redis-cli get greeting
 
 # inside the Docker container
 docker exec -it redis redis-cli LRANGE queue:emails 0 -1
-```
-
----
-
-## Repo structure
-
-Each folder is one self-contained topic with its own README. Click a topic below to
-read its full explanation.
-
-| Topic | What it demonstrates |
-|-------|----------------------|
-| [Redis basics: storing a value](./redis-basics-site-banner) | `SET` / `GET` / `DEL` / `EXISTS` on a string key via an Express API |
-| [TTL & key expiry (OTP flow)](./redis-ttl) | `SET ... EX`, `TTL`, and auto-expiring keys via a phone-OTP example |
-| [JSON-string vs Hash](./redis-json-vs-hash) | Storing an object as a JSON blob vs a Redis hash (`HSET` / `HGETALL`) |
-| [Email queue (Lists)](./email-queue-redis-lists) | A FIFO job queue using Redis lists (`LPUSH` / `RPOP`) |
-| [Pub/Sub notifications](./redis-pub-sub) | Real-time messaging with `PUBLISH` / `SUBSCRIBE` (publisher + subscriber) |
-
-### Running an example
-
-Most examples assume a local Redis. The quickest way is Docker:
-
-```bash
-docker run -d --name redis -p 6379:6379 redis:7
-```
-
-Then inside a topic folder:
-
-```bash
-npm install
-npm run dev
 ```
